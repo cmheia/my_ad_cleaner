@@ -12,14 +12,13 @@
 (function() {
 	'use strict';
 
-	var target_list = [
+	let target_list = [
 		".iv-branding.annotation-type-custom.annotation",
 	];
 
-	var purge = function () {
+	let purge = function () {
 		let elem;
 
-		console.log("do purge");
 		target_list.forEach((value, index, array1) => {
 			elem = document.querySelector(value);
 			if (elem) {
@@ -29,14 +28,23 @@
 		});
 	};
 
-	(function () {
-		var DOMObserverConfig = {
-			attributes : true,
-			childList  : true,
-		};
-		var DOMObserver = new MutationObserver(function () {
-				purge();
+	let log = function () {
+		let player = document.querySelector('#player-container');
+		if (player) {
+			console.log("purge go");
+			body_mo.disconnect();
+			let player_mo = new MutationObserver(purge);
+			player_mo.observe(player, {
+				childList : true,
+				subtree   : true,
 			});
-		DOMObserver.observe(document.body, DOMObserverConfig);
-	})();
+		}
+	};
+
+	let body_mo = new MutationObserver(log);
+
+	body_mo.observe(document.body, {
+		childList : true,
+		subtree   : true,
+	});
 })();
